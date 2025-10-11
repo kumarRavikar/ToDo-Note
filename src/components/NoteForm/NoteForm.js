@@ -1,13 +1,14 @@
 import { useState } from "react";
 import "./NoteForm.css";
-import { addNote } from "../../redux/actions/noteActions";
+//import { addNote } from "../../redux/actions/noteActions";
+import { actions } from "../../redux/reducers/noteReducer";
 import { useDispatch } from "react-redux";
 function NoteForm() {
   const [noteText, setNoteText] = useState("");
  const disptach = useDispatch()
   const handleSubmit = (e) => {
     e.preventDefault();
-    disptach(addNote(noteText))
+    disptach(actions.add(noteText))
     setNoteText("");
   };
 
