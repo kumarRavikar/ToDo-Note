@@ -6,6 +6,9 @@
 import {todoReducer} from "./reducers/todoReducer";
 import { noteReducer } from "./reducers/noteReducer";
 import { configureStore } from "@reduxjs/toolkit";
+import { notificationReducer } from "./reducers/notificationReducer";
+import { loggerMiddleware } from "./middlewares/loggerMiddleware";
+//import {  noteNotificationReducer } from "./reducers/noteNotyReducer";
 // creating store using redux
 // const result = combineReducers({
 //     todoReducer,
@@ -15,7 +18,10 @@ import { configureStore } from "@reduxjs/toolkit";
 export const store =configureStore({
     reducer:{
         todoReducer,
-        noteReducer
-    }
+        noteReducer,
+        notificationReducer,
+       // noteNotificationReducer
+    },
+    middleware:[loggerMiddleware]
 })
 

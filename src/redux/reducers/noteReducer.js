@@ -8,20 +8,20 @@ const initialState = {notes:[]};
     name:"note",
     initialState:initialState,
     reducers:{
-      add:(state,action)=>{
+      addNote:(state,action)=>{
         state.notes.push({
            text:action.payload,
             createdOn: new Date()
         })
       } ,
-      delete:(state, action)=>{
+      deleteNote:(state, action)=>{
         state.notes.splice(action.payload,1)
       } 
     }
   })
 
   export const noteReducer = noteSlice.reducer;
-  export const actions = noteSlice.actions;
+  export const noteActions = noteSlice.actions;
   export const notSelector = (state)=>state.noteReducer.notes;
      // creating reducers using redux 
 //  export function noteReducer(state=initialState, action){
