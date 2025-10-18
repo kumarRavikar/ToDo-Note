@@ -5,7 +5,7 @@
 // import { combineReducers } from "redux";
 import {todoReducer} from "./reducers/todoReducer";
 import { noteReducer } from "./reducers/noteReducer";
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { notificationReducer } from "./reducers/notificationReducer";
 import { loggerMiddleware } from "./middlewares/loggerMiddleware";
 //import {  noteNotificationReducer } from "./reducers/noteNotyReducer";
@@ -22,6 +22,11 @@ export const store =configureStore({
         notificationReducer,
        // noteNotificationReducer
     },
-    middleware:[loggerMiddleware]
+   // middleware:[...getDefaultMiddleware(),loggerMiddleware] //this is the older way to use and allow default middleware for thunk
+    middleware:(getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,        // this is the latest way to use and allow default middleware for thunk
+      thunk: true,
+    }).concat(loggerMiddleware),
 })
 

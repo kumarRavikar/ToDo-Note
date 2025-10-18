@@ -1,20 +1,42 @@
 
 // import { ADD_TODO, TOGGLE_TODO } from "../actions/todoActions";
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 const initialState={
     todos:[
-        {text:"Go to Gym at 6", completed: false},
-        {text: "Study at 8", completed: true}
     ]
 }
+//Fetch data using createAsyncThunk in redux 
+ export const getInitialSatatAsync = createAsyncThunk("todo/getInitialState",
+    (arg,thunkAPI)=>{
+//     fetch("http://localhost:4100/api/todos")
+//   .then(res=>res.json())
+//   .then(parseData=>{
+//     console.log(parseData)
+//     thunkAPI.dispatch(actions.setInitialState(parseData))
+    const data = fetch("http://localhost:4100/api/todos")
+     .then(res=>res.json()) // this return promise
+     return data
+ })
+  // Creating the POST method 
+  export const addTodoAsync = createAsyncThunk("todo/addTodo",async(payload)=>{
+     const data = await fetch("http://localhost:4100/api/todos",{
+        method:"POST",
+        headers:{
+            "content-type":"application/json"
+        },
+        body:JSON.stringify({
+            text:payload,
+            completed:false
+        })
+     })
+     return data.json();
+  })
+
 //creating reducer using redux/toolkit
 const todoSlice = createSlice({
     name:"Todo",
     initialState:initialState,
     reducers:{
-        setInitialState:(state,action)=>{
-          state.todos = action.payload
-        },
         add:(state, action)=>{
             state.todos.push({
                 text:action.payload,
@@ -29,6 +51,17 @@ const todoSlice = createSlice({
                 return todo
              })
         }
+    },
+    extraReducers:(builder)=>{
+        builder.addCase(getInitialSatatAsync.fulfilled,(state,action)=>{
+            // console.log("promise id fullfilled")
+            // console.log(action.payload)
+            state.todos = [...action.payload]
+        })
+        .addCase(addTodoAsync.fulfilled,(state,action)=>{
+            console.log(action.payload)
+            state.todos.push(action.payload)
+        })
     }
 })
 
